@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { Card, CardBody } from "@material-tailwind/react";
+import Card from "react-bootstrap/Card";
+import { GoPlusCircle } from "react-icons/go";
+import { BiEditAlt } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
 
 const TableItems = () => {
   const [data, setData] = useState([]); // State to hold fetched data
@@ -9,23 +12,47 @@ const TableItems = () => {
   // Define the columns based on your data structure (adjust column names accordingly)
   const columns = [
     {
+      name: "#",
+      selector: (row, index) => index + 1,
+      sortable: true,
+      cellClass: "custom-width-column",
+    },
+    {
       name: "Items Name",
-      selector: (row) => row.item_name, // Replace 'event' with the actual key in your database
+      selector: (row) => row.item_name,
       sortable: true,
     },
     {
       name: "Category",
-      selector: (row) => row.item_category, // Replace 'date' with the actual key in your database
+      selector: (row) => row.item_category,
       sortable: true,
     },
     {
       name: "Qty.",
-      selector: (row) => row.qty, // Replace 'location' with the actual key in your database
+      selector: (row) => row.qty,
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row.item_status, // Replace 'location' with the actual key in your database
+      selector: (row) => (
+        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+          {row.item_status}
+        </span>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Action",
+      selector: (row) => (
+        <>
+          <button class="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-4 mr-2 rounded-full">
+            <BiEditAlt />
+          </button>
+          <button class="text-lg bg-transparent hover:bg-red-500 hover:text-white border border-red-500 text-red-500 py-2 px-4 rounded-full">
+            <MdDeleteOutline />
+          </button>
+        </>
+      ),
       sortable: true,
     },
   ];
@@ -57,26 +84,34 @@ const TableItems = () => {
 
   return (
     <div className="p-4">
-      {/* Card from Material Tailwind */}
-      <Card className="shadow-lg">
-        <CardBody>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          <GoPlusCircle /> <span>Add Items</span>
+        </button>
+      </div>
+      <Card className="card card-lg shadow-lg">
+        {/* DataTable with pagination, sorting, and filtered data */}
+        <div className="flex item-center justify-between mb-4 mt-4 mr-4 ml-4">
+          <h1 className="text-lg font-semibold mt-4">Items List</h1>
           {/* Search input */}
           <input
             type="text"
             placeholder="Search"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="mb-4 p-2 border border-gray-300 rounded"
+            className="mb-4 p-2 mt-4 border border-gray-300 rounded"
           />
-          {/* DataTable with pagination, sorting, and filtered data */}
-          <DataTable
-            title="Items List"
-            columns={columns}
-            data={filteredData}
-            pagination
-            sortable
-          />
-        </CardBody>
+        </div>
+        <DataTable
+          title=""
+          columns={columns}
+          data={filteredData}
+          pagination
+          sortable
+        />
       </Card>
     </div>
   );
