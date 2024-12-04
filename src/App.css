@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-items {
-  align-items: center;
+.active {
+  font-weight: bold;
+  /* color: white; */
 }

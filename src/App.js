@@ -9,6 +9,7 @@ import Home from "./components/home-screen/home";
 import Slider from "./components/home-screen/slider";
 import TableItems from "./components/table/itemsTable";
 import Register from "./components/login-form/registerForm";
+import Navbar from "./components/navbar";
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
             path="/"
             element={
               <>
-                <Home />
+                <Navbar />
                 <Slider />
+                {/* <Home /> */}
               </>
             }
           ></Route>

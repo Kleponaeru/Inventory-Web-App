@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card";
 import { GoPlusCircle } from "react-icons/go";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
+import Navbar from "../navbar";
 
 const TableItems = () => {
   const [data, setData] = useState([]); // State to hold fetched data
@@ -45,10 +46,10 @@ const TableItems = () => {
       name: "Action",
       selector: (row) => (
         <>
-          <button class="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-4 mr-2 rounded-full">
+          <button className="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-4 mr-2 rounded-full transition-colors duration-300">
             <BiEditAlt />
           </button>
-          <button class="text-lg bg-transparent hover:bg-red-500 hover:text-white border border-red-500 text-red-500 py-2 px-4 rounded-full">
+          <button className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-4 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white">
             <MdDeleteOutline />
           </button>
         </>
@@ -83,37 +84,39 @@ const TableItems = () => {
   );
 
   return (
-    <div className="p-4">
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          <GoPlusCircle /> <span>Add Items</span>
-        </button>
-      </div>
-      <Card className="card card-lg shadow-lg">
-        {/* DataTable with pagination, sorting, and filtered data */}
-        <div className="flex item-center justify-between mb-4 mt-4 mr-4 ml-4">
-          <h1 className="text-lg font-semibold mt-4">Items List</h1>
-          {/* Search input */}
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="mb-4 p-2 mt-4 border border-gray-300 rounded"
+    <>
+      <Navbar />
+      <div className="p-4">
+        <div className="flex justify-end mb-4">
+          <button
+            type="submit"
+            className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            <GoPlusCircle /> <span>Add Items</span>
+          </button>
+        </div>
+        {/* Replace Bootstrap Card with Tailwind div */}
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-lg font-semibold">Items List</h1>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <DataTable
+            title=""
+            columns={columns}
+            data={filteredData}
+            pagination
+            sortable
           />
         </div>
-        <DataTable
-          title=""
-          columns={columns}
-          data={filteredData}
-          pagination
-          sortable
-        />
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };
 
