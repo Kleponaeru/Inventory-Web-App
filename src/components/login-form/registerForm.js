@@ -1,4 +1,4 @@
-export default function Login() {
+export default function Register() {
   return (
     <>
       <div className="flex justify-center min-h-screen login-page">
@@ -10,18 +10,58 @@ export default function Login() {
               className="mx-auto h-10 w-auto"
             />
             <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-              Sign in to your account
+              Register your account
             </h2>
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form action="#" method="POST" className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm/6 font-medium text-gray-900"
+                  >
+                    First Name
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="f_name"
+                      name="f_name"
+                      type="f_name"
+                      required
+                      autoComplete="f_name"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      placeholder="John"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="l_name"
+                    className="block text-sm/6 font-medium text-gray-900"
+                  >
+                    Last Name
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="l_name"
+                      name="l_name"
+                      type="l_name"
+                      required
+                      autoComplete="l_name"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      placeholder="Doe"
+                    />
+                  </div>
+                </div>
+              </div>
               <div>
                 <label
                   htmlFor="email"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
-                  Email address
+                  Email
                 </label>
                 <div className="mt-2">
                   <input
@@ -31,6 +71,7 @@ export default function Login() {
                     required
                     autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    placeholder="examples@gmail.com"
                   />
                 </div>
               </div>
@@ -43,14 +84,6 @@ export default function Login() {
                   >
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a
-                      href="#"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
                 </div>
                 <div className="mt-2">
                   <input
@@ -60,6 +93,7 @@ export default function Login() {
                     required
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    placeholder="Write your password here..."
                   />
                 </div>
               </div>
@@ -69,18 +103,18 @@ export default function Login() {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Sign in
+                  Sign Up
                 </button>
               </div>
             </form>
 
             <p className="mt-10 text-center text-sm/6 text-gray-500">
-              Not a member?{" "}
+              Have an Account?{" "}
               <a
-                href="#"
+                href="/login"
                 className="font-semibold text-indigo-600 hover:text-indigo-500"
               >
-                Start a 14 day free trial
+                Login Now
               </a>
             </p>
           </div>
