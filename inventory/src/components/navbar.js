@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Clear the token from localStorage or sessionStorage
-    localStorage.removeItem("authToken"); // or sessionStorage.removeItem("authToken");
+    localStorage.removeItem("authToken");
 
     // Redirect the user to the login page
     navigate("/login"); // Replace '/login' with the appropriate route for login
