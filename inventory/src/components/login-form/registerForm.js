@@ -1,4 +1,41 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function Register() {
+  const [f_name, setFName] = useState("");
+  const [l_name, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevents the default form submission
+
+    try {
+      const response = await fetch("http://localhost:5000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ f_name, l_name, email, password }),
+      });
+
+      const data = await response.json(); // Parse the JSON response
+
+      if (response.ok) {
+        // If registration is successful, redirect to the login page
+        navigate("/login", {
+          state: { success: "Registration successful! Please log in." },
+        });
+      } else {
+        alert(data.error || "Registration failed!");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("An error occurred during registration.");
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center min-h-screen login-page">
@@ -15,7 +52,7 @@ export default function Register() {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="http://localhost:5000/api/register" method="POST" className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -28,7 +65,9 @@ export default function Register() {
                     <input
                       id="f_name"
                       name="f_name"
-                      type="f_name"
+                      type="text"
+                      value={f_name}
+                      onChange={(e) => setFName(e.target.value)}
                       required
                       autoComplete="f_name"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -47,7 +86,9 @@ export default function Register() {
                     <input
                       id="l_name"
                       name="l_name"
-                      type="l_name"
+                      type="text"
+                      value={l_name}
+                      onChange={(e) => setLName(e.target.value)}
                       required
                       autoComplete="l_name"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -68,6 +109,8 @@ export default function Register() {
                     id="email"
                     name="email"
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -90,6 +133,8 @@ export default function Register() {
                     id="password"
                     name="password"
                     type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
