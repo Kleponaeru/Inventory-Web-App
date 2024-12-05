@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link, useNavigate } from "react-router";
 import { MdLogout } from "react-icons/md";
@@ -7,26 +7,75 @@ const Navbar = () => {
   // State to manage the navbar's visibility
   const [nav, setNav] = useState(false);
   const navigate = useNavigate();
-  // Toggle function to handle the navbar's display
+  const [user, setUser] = useState(null);
+
   const handleNav = () => {
     setNav(!nav);
   };
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setUser(data);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token"); 
+        // console.log(token);
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await fetch("/api/user", {
+          // Removed extra spaces
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+          console.log("User data:", data); // Debug log
+        } else {
+          console.error("Failed to fetch user data");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   // Array containing navigation items
   const navItems = [
     { id: 1, text: "Home", href: "/" },
     { id: 2, text: "Items", href: "/inventory" },
     { id: 3, text: "Transactions", href: "/transactions" },
-    { id: 4, text: "Report", href: "/" },
+    ...(user?.admin === "Y" ? [{ id: 4, text: "Report", href: "/" }] : []),
     { id: 5, text: "Logout", href: "/", icon: <MdLogout /> },
   ];
 
   const handleLogout = () => {
-    // Clear the token from localStorage or sessionStorage
-    localStorage.removeItem("authToken");
-
-    // Redirect the user to the login page
-    navigate("/login"); // Replace '/login' with the appropriate route for login
+    localStorage.removeItem("token"); // Consistent token name
+    navigate("/login");
   };
 
   return (

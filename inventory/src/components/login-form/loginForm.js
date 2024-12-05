@@ -40,7 +40,7 @@ export default function Login() {
       const data = await response.json(); // Parse the JSON response
 
       if (response.ok) {
-        // If registration is successful, redirect to the login page
+        localStorage.setItem('token', data.token);
         navigate("/inventory", {
           state: { success: "Login successful!" },
         });
