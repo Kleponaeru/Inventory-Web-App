@@ -28,6 +28,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Invalid token" });
+    }
+    req.user = user;
+    next();
+  });
+};
+
 // API Routes
 app.get("/", (req, res) => {
   res.send("This is node server!");
@@ -95,21 +112,8 @@ app.post("/api/login", (req, res) => {
         }
 
         const user = result[0];
-        // console.log("Input password:", password);
-        // console.log("Hash from DB:", user.password);
-        // console.log("Hash length:", user.password.length);
 
         try {
-          // Add more detailed error handling
-          if (!user.password.startsWith("$2")) {
-            console.error(
-              "Stored hash doesn't appear to be a valid bcrypt hash"
-            );
-            return res
-              .status(500)
-              .json({ error: "Invalid password hash format" });
-          }
-
           const isPasswordMatch = await bcrypt.compare(password, user.password);
           // console.log("Password match result:", isPasswordMatch);
 
@@ -138,7 +142,21 @@ app.post("/api/login", (req, res) => {
   }
 });
 
-app.get("/api/users", (req, res) => {
+app.get("/api/user", authenticateToken, (req, res) => {
+  con.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    [req.user.userId],
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Failed" });
+        return;
+      }
+      res.json(result[0]);
+    }
+  );
+});
+
+app.get("/api/get/users", (req, res) => {
   con.query("SELECT * FROM users", function (err, result) {
     if (err) {
       res.status(500).json({ error: "Query Fail" });
