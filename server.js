@@ -91,26 +91,34 @@ app.post("/api/login", (req, res) => {
         }
 
         if (result.length === 0) {
-          // No user found with this email
           return res.status(400).json({ error: "Invalid email or password" });
         }
 
         const user = result[0];
-        console.log("Hash from DB:", user.password);
+        // console.log("Input password:", password);
+        // console.log("Hash from DB:", user.password);
+        // console.log("Hash length:", user.password.length);
 
         try {
-          // Compare hashed password from DB with input password
+          // Add more detailed error handling
+          if (!user.password.startsWith("$2")) {
+            console.error(
+              "Stored hash doesn't appear to be a valid bcrypt hash"
+            );
+            return res
+              .status(500)
+              .json({ error: "Invalid password hash format" });
+          }
+
           const isPasswordMatch = await bcrypt.compare(password, user.password);
-          console.log("Password match:", isPasswordMatch);
+          // console.log("Password match result:", isPasswordMatch);
 
           if (isPasswordMatch) {
-            // Generate a JWT token
             const token = jwt.sign(
               { userId: user.user_id, email: user.email },
-              process.env.JWT_SECRET, // Ensure JWT_SECRET is properly set in .env
-              { expiresIn: "1h" } // Token expires in 1 hour
+              process.env.JWT_SECRET,
+              { expiresIn: "1h" }
             );
-            // Send response with the JWT token
             return res.json({
               message: "Login successful!",
               token,
@@ -119,8 +127,8 @@ app.post("/api/login", (req, res) => {
             return res.status(400).json({ error: "Invalid email or password" });
           }
         } catch (bcryptError) {
-          console.error("Error comparing password hashes:", bcryptError);
-          return res.status(500).json({ error: "Internal server error" });
+          console.error("Detailed bcrypt error:", bcryptError);
+          return res.status(500).json({ error: "Password comparison failed" });
         }
       }
     );
