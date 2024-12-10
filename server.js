@@ -28,23 +28,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const authenticateToken = (req, res, next) => {
+function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = authHeader && authHeader.split(" ")[1]; // Get the token from Bearer token
 
   if (!token) {
-    return res.status(401).json({ error: "No token provided" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ error: "Invalid token" });
     }
-    req.user = user;
+
+    // Attach user data to request object
+    req.user = { userId: decoded.userId }; // Make sure userId is decoded from the JWT
     next();
   });
-};
-
+}
 // API Routes
 app.get("/", (req, res) => {
   res.send("This is node server!");
@@ -157,13 +158,17 @@ app.get("/api/user", authenticateToken, (req, res) => {
 });
 
 app.get("/api/get/users", (req, res) => {
-  con.query("SELECT * FROM users", function (err, result) {
-    if (err) {
-      res.status(500).json({ error: "Query Fail" });
-      return;
+  con.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    [req.user.userId],
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Fail" });
+        return;
+      }
+      res.json(result);
     }
-    res.json(result);
-  });
+  );
 });
 
 //SET PORT AND ROUTE
