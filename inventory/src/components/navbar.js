@@ -67,7 +67,7 @@ const Navbar = () => {
   // Array containing navigation items
   const navItems = [
     { id: 1, text: "Home", href: "/" },
-    { id: 2, text: "Items", href: "/inventory" },
+    { id: 2, text: "Inventory", href: "/inventory" },
     { id: 3, text: "Transactions", href: "/transactions" },
     ...(user?.admin === "Y" ? [{ id: 4, text: "Report", href: "/" }] : []),
     { id: 5, text: "Logout", href: "/", icon: <MdLogout /> },

@@ -3,14 +3,15 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-export default function Login() {
+export default function Login({ onLogin }) {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const successMessage = location.state?.success; // Get success message from state
   const [showAlert, setShowAlert] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (successMessage) {
@@ -40,8 +41,9 @@ export default function Login() {
       const data = await response.json(); // Parse the JSON response
 
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        navigate("/inventory", {
+        onLogin(data.token);
+        localStorage.setItem("token", data.token);
+        navigate("/home", {
           state: { success: "Login successful!" },
         });
       } else {

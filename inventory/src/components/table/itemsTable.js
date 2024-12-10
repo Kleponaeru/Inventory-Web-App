@@ -5,6 +5,7 @@ import { GoPlusCircle } from "react-icons/go";
 import { BiEditAlt } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
 import Navbar from "../navbar";
+import { useNavigate } from "react-router-dom";
 
 const TableItems = () => {
   const [data, setData] = useState([]); // State to hold fetched data
@@ -83,13 +84,15 @@ const TableItems = () => {
       item.item_status.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const navigate = useNavigate();
   return (
     <>
       <Navbar />
       <div className="p-4">
         <div className="flex justify-end mb-4">
           <button
-            type="submit"
+            type="button"
+            onClick={() => navigate("/inventory/add")}
             className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             <GoPlusCircle /> <span>Add Items</span>

@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+
 const links = [
   { name: "Open roles", href: "#" },
   { name: "Internship program", href: "#" },
@@ -12,8 +16,22 @@ const stats = [
 ];
 
 export default function Home() {
+  const location = useLocation();
+  const [successMessage, setSuccessMessage] = useState(
+    location.state?.success || null
+  );
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(null), 4000); // Hide after 4 seconds
+      return () => clearTimeout(timer); // Cleanup timer
+    }
+  }, [successMessage]);
+
   return (
     <>
+      <div>
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
+      </div>
       <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
         <img
           alt=""
