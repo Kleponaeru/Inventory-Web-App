@@ -62,6 +62,17 @@ app.get("/api/items", (req, res) => {
   });
 });
 
+//CATEGORIES
+app.get("/api/categories", (req, res) => {
+  con.query("SELECT * FROM item_categories WHERE active = 'T' ORDER BY category_name", function (err, result) {
+    if (err) {
+      res.status(500).json({ error: "Query Fail" });
+      return;
+    }
+    res.json(result);
+  });
+});
+
 //Users routes
 app.post("/api/register", async (req, res) => {
   const { f_name, l_name, email, password } = req.body;
