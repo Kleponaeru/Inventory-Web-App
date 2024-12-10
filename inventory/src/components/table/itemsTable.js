@@ -17,7 +17,8 @@ const TableItems = () => {
       name: "#",
       selector: (row, index) => index + 1,
       sortable: true,
-      cellClass: "custom-width-column",
+      width: "60px",
+      compact: true,
     },
     {
       name: "Items Name",
@@ -30,32 +31,61 @@ const TableItems = () => {
       sortable: true,
     },
     {
+      name: "Supplier",
+      selector: (row) => row.supplier,
+      sortable: true,
+    },
+    {
       name: "Qty.",
       selector: (row) => row.qty,
+      sortable: true,
+      width: "60px",
+      compact: true,
+    },
+    {
+      name: "Cost",
+      selector: (row) => formatCurrency(row.cost),
+      sortable: true,
+    },
+    {
+      name: "Sale Price",
+      selector: (row) => formatCurrency(row.sale_price),
+      sortable: true,
+    },
+    {
+      name: "Exp. Date",
+      selector: (row) => formatDate(row.expiration_date),
+      sortable: true,
+    },
+    {
+      name: "Arrival Date",
+      selector: (row) => formatDate(row.arrival_date),
       sortable: true,
     },
     {
       name: "Status",
       selector: (row) => (
-        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+        <span class="bg-blue-100 text-blue-800 text-xs px-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
           {row.item_status}
         </span>
       ),
       sortable: true,
+      compact: true,
     },
     {
       name: "Action",
       selector: (row) => (
         <>
-          <button className="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-4 mr-2 rounded-full transition-colors duration-300">
+          <button className="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-2 mr-2 rounded-full transition-colors duration-300">
             <BiEditAlt />
           </button>
-          <button className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-4 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white">
+          <button className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-2 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white">
             <MdDeleteOutline />
           </button>
         </>
       ),
       sortable: true,
+      width: "120px",
     },
   ];
 
@@ -83,6 +113,26 @@ const TableItems = () => {
       item.qty.toString().toLowerCase().includes(searchText.toLowerCase()) ||
       item.item_status.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.toLocaleString("default", { month: "short" }); // Gets abbreviated month name
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  }
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0, // Optional: You can add more decimal places if needed
+    })
+      .format(amount)
+      .replace("Rp", "Rp "); // Replace currency symbol with "Rp "
+  }
 
   const navigate = useNavigate();
   return (

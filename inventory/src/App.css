@@ -6,3 +6,71 @@
   font-weight: bold;
   /* color: white; */
 }
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  padding: 20px; /* Adjust padding for the content */
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px; /* Adjust max width */
+  padding: 20px; /* Adjust padding */
+}
+
+/* select.css */
+
+/* Control (main input wrapper) */
+.custom-select__control {
+  border-radius: 0.375rem !important;
+  background-color: white !important;
+  padding: 1.5px 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
+  border-color: #d1d5db !important;
+  border-width: 1px !important;
+  min-height: 34px !important;
+  box-shadow: none !important;
+}
+
+.custom-select__control:hover {
+  border-color: #d1d5db !important;
+}
+
+.custom-select__control:focus {
+  outline: 2px solid #4f46e5 !important;
+  outline-offset: -2px !important;
+}
+
+/* Placeholder */
+.custom-select__placeholder {
+  color: #9ca3af !important;
+}
+
+/* Input */
+.custom-select__input-container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Value container */
+.custom-select__value-container {
+  padding: 0 8px !important;
+}
+
+/* Indicators container (dropdown arrow, clear button) */
+.custom-select__indicators {
+  height: 32px !important;
+}
