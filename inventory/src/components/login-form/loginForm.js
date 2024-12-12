@@ -43,7 +43,7 @@ export default function Login({ onLogin }) {
       if (response.ok) {
         onLogin(data.token);
         localStorage.setItem("token", data.token);
-        navigate("/home", {
+        navigate("/dashboard", {
           state: { success: "Login successful!" },
         });
       } else {
