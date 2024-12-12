@@ -230,7 +230,7 @@ function FormInput() {
                   htmlFor="cost"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
-                  Cost (Purchase cost)
+                  Cost per item (Purchase cost)
                 </label>
                 <div className="mt-2">
                   <input
@@ -251,7 +251,7 @@ function FormInput() {
                   htmlFor="sales_price"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
-                  Sale Price (Sales cost)
+                  Sale Price per item (Sales cost)
                 </label>
                 <div className="mt-2">
                   <input

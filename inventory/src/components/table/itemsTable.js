@@ -43,12 +43,12 @@ const TableItems = () => {
       compact: true,
     },
     {
-      name: "Cost",
+      name: "Cost per item",
       selector: (row) => formatCurrency(row.cost),
       sortable: true,
     },
     {
-      name: "Sale Price",
+      name: "Sale Price per item",
       selector: (row) => formatCurrency(row.sale_price),
       sortable: true,
     },
