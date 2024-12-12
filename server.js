@@ -30,7 +30,7 @@ app.use(cors());
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Get the token from Bearer token
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -41,8 +41,8 @@ function authenticateToken(req, res, next) {
       return res.status(403).json({ error: "Invalid token" });
     }
 
-    // Attach user data to request object
-    req.user = { userId: decoded.userId }; // Make sure userId is decoded from the JWT
+    // Use userId here, matching the token generation
+    req.user = { userId: decoded.userId };
     next();
   });
 }
@@ -64,13 +64,16 @@ app.get("/api/items", (req, res) => {
 
 //CATEGORIES
 app.get("/api/categories", (req, res) => {
-  con.query("SELECT * FROM item_categories WHERE active = 'T' ORDER BY category_name", function (err, result) {
-    if (err) {
-      res.status(500).json({ error: "Query Fail" });
-      return;
+  con.query(
+    "SELECT * FROM item_categories WHERE active = 'T' ORDER BY category_name",
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Fail" });
+        return;
+      }
+      res.json(result);
     }
-    res.json(result);
-  });
+  );
 });
 
 //Users routes
@@ -168,7 +171,7 @@ app.get("/api/user", authenticateToken, (req, res) => {
   );
 });
 
-app.get("/api/get/users", (req, res) => {
+app.get("/api/get/users", authenticateToken, (req, res) => {
   con.query(
     "SELECT * FROM users WHERE user_id = ?",
     [req.user.userId],
@@ -180,6 +183,61 @@ app.get("/api/get/users", (req, res) => {
       res.json(result);
     }
   );
+});
+
+//CRUD INVENTORY
+app.post("/api/items/add", authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+  const {
+    item_name,
+    id_category,
+    item_category,
+    qty,
+    supplier,
+    brand,
+    cost,
+    sales_price,
+    description,
+    expiration_date,
+    arrival_date,
+  } = req.body;
+
+  try {
+    const query =
+      "INSERT INTO items (item_name, id_category, item_category, qty, supplier, brand, cost, sale_price, description, expiration_date, arrival_date, created_by, item_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    con.query(
+      query,
+      [
+        item_name,
+        id_category,
+        item_category,
+        qty,
+        supplier,
+        brand,
+        cost,
+        sales_price,
+        description,
+        expiration_date,
+        arrival_date,
+        userId,
+        "Available",
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          return res.status(500).json({ error: "Failed to insert item" });
+        }
+        res.json({
+          message: "Data inserted successfully!",
+          itemId: result.insertId,
+        });
+      }
+    );
+  } catch (err) {
+    console.error("Error generating user ID:", err);
+    res.status(500).json({ error: "Failed to generate user ID" });
+  }
 });
 
 //SET PORT AND ROUTE
