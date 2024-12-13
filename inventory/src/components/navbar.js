@@ -1,47 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 
 const Navbar = () => {
-  // State to manage the navbar's visibility
   const [nav, setNav] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get current path
   const [user, setUser] = useState(null);
 
   const handleNav = () => {
     setNav(!nav);
   };
 
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setUser(data);
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token"); 
-        // console.log(token);
+        const token = localStorage.getItem("token");
         if (!token) {
           navigate("/login");
           return;
         }
 
         const response = await fetch("/api/user", {
-          // Removed extra spaces
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -57,14 +38,12 @@ const Navbar = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        // navigate("/login");
       }
     };
 
     fetchUserData();
   }, [navigate]);
 
-  // Array containing navigation items
   const navItems = [
     { id: 1, text: "Dashboard", href: "/dashboard" },
     { id: 2, text: "Inventory", href: "/inventory" },
@@ -74,12 +53,13 @@ const Navbar = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Consistent token name
+    localStorage.removeItem("token");
     navigate("/login");
   };
 
   return (
-    <div className="bg-black flex justify-between items-center h-24 max-w mx-auto px-4 text-white">
+    <nav className="bg-black h-16 sticky top-0 z-50">
+    <div className="flex justify-between items-center h-24 max-w mx-auto px-4 text-white">
       {/* Logo */}
       <h1 className="w-full text-3xl font-bold text-white">LY.</h1>
 
@@ -88,7 +68,11 @@ const Navbar = () => {
         {navItems.map((item) => (
           <li
             key={item.id}
-            className="p-4 hover:bg-white rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
+            className={`p-4 rounded-xl m-2 cursor-pointer duration-300 ${
+              location.pathname === item.href
+                ? "bg-white text-black"
+                : "hover:bg-white hover:text-black"
+            }`}
             onClick={item.text === "Logout" ? handleLogout : null}
           >
             <Link to={item.href} className="flex items-center">
@@ -119,13 +103,19 @@ const Navbar = () => {
         {navItems.map((item) => (
           <li
             key={item.id}
-            className="p-4 border-b rounded-xl hover:bg-[#00df9a] duration-300 hover:text-black cursor-pointer border-gray-600"
+            className={`p-4 border-b rounded-xl duration-300 cursor-pointer border-gray-600 ${
+              location.pathname === item.href
+                ? "bg-[#00df9a] text-black"
+                : "hover:bg-[#00df9a] hover:text-black"
+            }`}
+            onClick={item.text === "Logout" ? handleLogout : null}
           >
-            {item.text}
+            <Link to={item.href}>{item.text}</Link>
           </li>
         ))}
       </ul>
     </div>
+    </nav>
   );
 };
 
