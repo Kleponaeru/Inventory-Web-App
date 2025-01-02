@@ -222,7 +222,7 @@ app.post("/api/items/add", authenticateToken, async (req, res) => {
 
   try {
     const query =
-      "INSERT INTO items (item_name, id_category, item_category, qty, supplier, brand, cost, sale_price, description, expiration_date, arrival_date, created_by, item_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO items (item_name, id_category, item_category, qty, supplier, brand, cost, sale_price, description, expiration_date, arrival_date, created_by, item_status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
     con.query(
       query,
@@ -254,6 +254,77 @@ app.post("/api/items/add", authenticateToken, async (req, res) => {
     );
   } catch (err) {
     console.error("Error generating user ID:", err);
+    res.status(500).json({ error: "Failed to generate user ID" });
+  }
+});
+app.put("/api/items/update/:id", authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+  const {
+    item_name,
+    id_category,
+    item_category,
+    qty,
+    supplier,
+    brand,
+    cost,
+    sales_price,
+    description,
+    expiration_date,
+    arrival_date,
+  } = req.body;
+
+  try {
+    const itemId = req.params.id;
+    const query = `
+    UPDATE items 
+    SET item_name = ?, 
+        id_category = ?, 
+        item_category = ?, 
+        qty = ?, 
+        supplier = ?, 
+        brand = ?, 
+        cost = ?, 
+        sale_price = ?, 
+        description = ?, 
+        expiration_date = ?, 
+        arrival_date = ?, 
+        updated_by = ?, 
+        updated_at = NOW(), 
+        item_status = ? 
+    WHERE id = ?
+  `;
+
+    con.query(
+      query,
+      [
+        item_name,
+        id_category,
+        item_category,
+        qty,
+        supplier,
+        brand,
+        cost,
+        sales_price,
+        description,
+        expiration_date,
+        arrival_date,
+        userId,
+        "Available",
+        itemId,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error("Error executing query:", err);
+          return res.status(500).json({ error: "Failed to update item" });
+        }
+        res.json({
+          message: "Data updated successfully!",
+          itemId: result.insertId,
+        });
+      }
+    );
+  } catch (err) {
+    console.error("Error updating user ID:", err);
     res.status(500).json({ error: "Failed to generate user ID" });
   }
 });

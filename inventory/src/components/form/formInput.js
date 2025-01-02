@@ -37,8 +37,11 @@ function FormInput() {
         id: selected.value, // This is the category ID
         name: selected.label, // This is the category name
       });
+      const categoriesWithExpiry = ["Food & Beverages", "Health & Nutrition"];
+      setIsExpirationDisabled(!categoriesWithExpiry.includes(selected.label)); // D
     } else {
       setItemCategory({ id: "", name: "" });
+      setIsExpirationDisabled(true);
     }
   };
 
@@ -52,6 +55,7 @@ function FormInput() {
   const [description, setDescription] = useState("");
   const [expiration_date, setExpirationDate] = useState("");
   const [arrival_date, setArrivalDate] = useState("");
+  const [isExpirationDisabled, setIsExpirationDisabled] = useState(false);
 
   const navigate = useNavigate();
 
@@ -70,8 +74,8 @@ function FormInput() {
         },
         body: JSON.stringify({
           item_name,
-          id_category: item_category.id,        // Send category ID
-          item_category: item_category.name,   
+          id_category: item_category.id, // Send category ID
+          item_category: item_category.name,
           qty: parseInt(qty), // Convert to number
           supplier,
           brand,
@@ -302,7 +306,8 @@ function FormInput() {
                       type="date"
                       value={expiration_date}
                       onChange={(e) => setExpirationDate(e.target.value)}
-                      required
+                      required={!isExpirationDisabled} // Make it required only if enabled
+                      disabled={isExpirationDisabled} // Disable the field based on category
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                   </div>

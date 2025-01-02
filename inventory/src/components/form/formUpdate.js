@@ -104,8 +104,8 @@ function FormUpdate() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:5000/api/items/add", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/api/items/update/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Add the token to the Authorization header
@@ -126,7 +126,7 @@ function FormUpdate() {
       });
 
       const data = await response.json(); // Parse the JSON response
-
+console.log(data);
       if (response.ok) {
         // If item addition is successful, redirect to inventory page
         navigate("/inventory", {
@@ -137,7 +137,7 @@ function FormUpdate() {
       }
     } catch (err) {
       console.error("Error:", err);
-      alert("An error occurred during item insertion.");
+      alert("An error occurred during item update.");
     }
   };
 
