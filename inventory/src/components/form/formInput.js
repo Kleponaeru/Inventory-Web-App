@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./navbar";
+import Navbar from "../navbar";
 import Card from "@mui/material/Card";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";

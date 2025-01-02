@@ -76,10 +76,18 @@ const TableItems = () => {
       name: "Action",
       selector: (row) => (
         <>
-          <button className="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-2 mr-2 rounded-full transition-colors duration-300">
+          <button
+            className="text-lg bg-indigo-500 hover:bg-indigo-800 text-white py-2 px-2 mr-2 rounded-full transition-colors duration-300"
+            type="button"
+            onClick={() => navigate(`/inventory/update/${row.id}`)}
+          >
             <BiEditAlt />
           </button>
-          <button className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-2 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white">
+          <button
+            className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-2 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white"
+            type="button"
+            onClick={() => navigate("")}
+          >
             <MdDeleteOutline />
           </button>
         </>

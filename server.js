@@ -61,6 +61,24 @@ app.get("/api/items", (req, res) => {
     res.json(result);
   });
 });
+app.get("/api/items/:id", (req, res) => {
+  const itemId = req.params.id;
+  con.query(
+    "SELECT * FROM items WHERE id = ?",
+    [itemId],
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Fail" });
+        return;
+      }
+      if (result.length > 0) {
+        res.json(result[0]); // Return the first matching item
+      } else {
+        res.status(404).json({ error: "Item not found" });
+      }
+    }
+  );
+});
 
 //CATEGORIES
 app.get("/api/categories", (req, res) => {
