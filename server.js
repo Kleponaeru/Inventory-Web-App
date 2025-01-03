@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 
 //ITEMS
 app.get("/api/items", (req, res) => {
-  con.query("SELECT * FROM items", function (err, result) {
+  con.query("SELECT * FROM items WHERE deleted_at IS NULL", function (err, result) {
     if (err) {
       res.status(500).json({ error: "Query Fail" });
       return;

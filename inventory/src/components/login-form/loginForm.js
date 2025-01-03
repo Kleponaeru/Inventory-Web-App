@@ -3,31 +3,33 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 export default function Login({ onLogin }) {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const successMessage = location.state?.success; // Get success message from state
-  const [showAlert, setShowAlert] = useState(false);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Success message handling
+  const successMessage = location.state?.success;
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (successMessage) {
       setShowAlert(true);
-
-      // Set timeout to hide the alert
       const timer = setTimeout(() => {
         setShowAlert(false);
-      }, 4000); // 4000ms = 4 seconds
-
+      }, 4000);
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevents the default form submission
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/api/login", {
@@ -38,22 +40,34 @@ export default function Login({ onLogin }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json(); // Parse the JSON response
+      const data = await response.json();
 
       if (response.ok) {
+        // Store token with consistent key name
+        localStorage.setItem("authToken", data.token);
+
+        // Verify token was stored correctly
+        const storedToken = localStorage.getItem("authToken");
+        console.log("Token stored successfully:", !!storedToken);
+
+        // Call onLogin callback
         onLogin(data.token);
-        localStorage.setItem("token", data.token);
+
+        // Navigate to dashboard
         navigate("/dashboard", {
           state: { success: "Login successful!" },
         });
       } else {
-        alert(data.error || "Login failed!");
+        setError(data.error || "Invalid email or password");
       }
     } catch (err) {
-      console.error("Error:", err);
-      alert("An error occurred during Login.");
+      console.error("Login error:", err);
+      setError("An error occurred during login. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <>
       {showAlert && (
@@ -75,6 +89,12 @@ export default function Login({ onLogin }) {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {error && (
+              <div className="mb-4 p-3 text-sm text-red-500 bg-red-50 rounded-md">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
@@ -94,6 +114,7 @@ export default function Login({ onLogin }) {
                     autoComplete="email"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     placeholder="examples@gmail.com"
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -126,6 +147,7 @@ export default function Login({ onLogin }) {
                     autoComplete="current-password"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     placeholder="Write your password here..."
+                    disabled={loading}
                   />
                 </div>
               </div>
@@ -133,9 +155,12 @@ export default function Login({ onLogin }) {
               <div>
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  disabled={loading}
                 >
-                  Sign in
+                  {loading ? "Signing in..." : "Sign in"}
                 </button>
               </div>
             </form>

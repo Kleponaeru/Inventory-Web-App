@@ -7,10 +7,14 @@ import { MdDeleteOutline } from "react-icons/md";
 import Navbar from "../navbar";
 import { useNavigate } from "react-router-dom";
 
-const TableItems = () => {
-  const [data, setData] = useState([]); // State to hold fetched data
-  const [searchText, setSearchText] = useState(""); // State to handle search input
+const TableItems = () => {  
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(null);
 
+  
   // Define the columns based on your data structure (adjust column names accordingly)
   const columns = [
     {
@@ -88,7 +92,7 @@ const TableItems = () => {
             type="button"
             onClick={async () => {
               const token = localStorage.getItem("authToken");
-
+              console.log(token);
               if (!token) {
                 console.error("No token found. Please log in again.");
                 return;
@@ -110,13 +114,6 @@ const TableItems = () => {
                 if (response.ok) {
                   const data = await response.json();
                   console.log("Item deleted:", data);
-
-                  // Update the UI: Remove item or re-fetch items
-                  // Example: Assuming you have a state for items
-                  // setItems((prevItems) => prevItems.filter(item => item.id !== row.id));
-
-                  // Optionally, refresh the items list or navigate away
-                  // Example: navigate("/items"); // If you're using React Router
                 } else {
                   const errorData = await response.json();
                   console.error("Error deleting item:", errorData);
