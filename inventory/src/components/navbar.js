@@ -58,7 +58,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-black h-16 sticky top-0 z-100">
+    <nav className="bg-black h-16 sticky top-0 z-50">
       <div className="flex justify-between items-center h-full w-full px-6 text-white">
         {/* Logo */}
         <h1 className="w-full text-3xl font-bold text-white">LY.</h1>
@@ -89,12 +89,18 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation Menu */}
+        {nav && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={handleNav}
+          />
+        )}
         <ul
-          className={
+          className={`${
             nav
-              ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500"
+              ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500 z-50"
               : "ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]"
-          }
+          }`}
         >
           {/* Mobile Logo */}
           <h1 className="w-full text-3xl font-bold text-[#FFFFFF] m-4">LY.</h1>

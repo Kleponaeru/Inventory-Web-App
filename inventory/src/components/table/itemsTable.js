@@ -7,14 +7,35 @@ import { MdDeleteOutline } from "react-icons/md";
 import Navbar from "../navbar";
 import { useNavigate } from "react-router-dom";
 
-const TableItems = () => {  
+const TableItems = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [isDeleting, setIsDeleting] = useState(null);
 
-  
+  // Customize table styles for better mobile view
+  const customStyles = {
+    table: {
+      style: {
+        minWidth: "600px", // Set a minimum width
+        overflowX: "auto", // Enable horizontal scrolling
+      },
+    },
+    headRow: {
+      style: {
+        fontSize: "12px",
+        fontWeight: "bold",
+      },
+    },
+    rows: {
+      style: {
+        fontSize: "12px",
+        minHeight: "40px",
+      },
+    },
+  };
+
   // Define the columns based on your data structure (adjust column names accordingly)
   const columns = [
     {
@@ -205,13 +226,16 @@ const TableItems = () => {
               className="p-2 border border-gray-300 rounded"
             />
           </div>
-          <DataTable
-            title=""
-            columns={columns}
-            data={filteredData}
-            pagination
-            sortable
-          />
+          <div className="overflow-x-auto">
+            <DataTable
+              columns={columns}
+              data={filteredData}
+              pagination
+              paginationPerPage={10}
+              customStyles={customStyles}
+              responsive
+            />
+          </div>
         </div>
       </div>
     </>
