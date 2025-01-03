@@ -141,14 +141,13 @@ app.post("/api/login", (req, res) => {
         }
 
         if (result.length === 0) {
-          return res.status(400).json({ error: "Invalid email or password" });
+          return res.status(400).json({ error: "Email not found" }); // More specific error
         }
 
         const user = result[0];
 
         try {
           const isPasswordMatch = await bcrypt.compare(password, user.password);
-          // console.log("Password match result:", isPasswordMatch);
 
           if (isPasswordMatch) {
             const token = jwt.sign(
@@ -156,15 +155,16 @@ app.post("/api/login", (req, res) => {
               process.env.JWT_SECRET,
               { expiresIn: "1h" }
             );
+
             return res.json({
               message: "Login successful!",
               token,
             });
           } else {
-            return res.status(400).json({ error: "Invalid email or password" });
+            return res.status(400).json({ error: "Incorrect password" }); // More specific error
           }
         } catch (bcryptError) {
-          console.error("Detailed bcrypt error:", bcryptError);
+          console.error("Password comparison failed:", bcryptError);
           return res.status(500).json({ error: "Password comparison failed" });
         }
       }
@@ -323,6 +323,38 @@ app.put("/api/items/update/:id", authenticateToken, async (req, res) => {
         });
       }
     );
+  } catch (err) {
+    console.error("Error updating user ID:", err);
+    res.status(500).json({ error: "Failed to generate user ID" });
+  }
+});
+
+app.post("/api/items/delete/:id", authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+  try {
+    const itemId = req.params.id; // Getting itemId from the URL parameter
+    const query = `
+      UPDATE items 
+      SET deleted_by = ?, 
+          deleted_at = NOW()
+      WHERE id = ?
+    `;
+
+    con.query(query, [userId, itemId], (err, result) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ error: "Failed to update item" });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Item not found" });
+      }
+
+      res.json({
+        message: "Data deleted successfully!",
+        itemId: itemId,
+      });
+    });
   } catch (err) {
     console.error("Error updating user ID:", err);
     res.status(500).json({ error: "Failed to generate user ID" });

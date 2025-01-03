@@ -86,7 +86,47 @@ const TableItems = () => {
           <button
             className="text-lg bg-transparent text-red-700 border border-red-700 rounded-full py-2 px-2 inline-flex items-center justify-center transition-colors duration-300 hover:bg-red-500 hover:text-white"
             type="button"
-            onClick={() => navigate("")}
+            onClick={async () => {
+              const token = localStorage.getItem("authToken");
+
+              if (!token) {
+                console.error("No token found. Please log in again.");
+                return;
+              }
+
+              try {
+                // Make API request to delete the item
+                const response = await fetch(
+                  `http://localhost:5000/api/items/delete/${row.id}`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+
+                if (response.ok) {
+                  const data = await response.json();
+                  console.log("Item deleted:", data);
+
+                  // Update the UI: Remove item or re-fetch items
+                  // Example: Assuming you have a state for items
+                  // setItems((prevItems) => prevItems.filter(item => item.id !== row.id));
+
+                  // Optionally, refresh the items list or navigate away
+                  // Example: navigate("/items"); // If you're using React Router
+                } else {
+                  const errorData = await response.json();
+                  console.error("Error deleting item:", errorData);
+                  alert(errorData.error || "Failed to delete item.");
+                }
+              } catch (error) {
+                console.error("Request failed:", error);
+                alert("An error occurred while trying to delete the item.");
+              }
+            }}
           >
             <MdDeleteOutline />
           </button>

@@ -126,7 +126,7 @@ function FormUpdate() {
       });
 
       const data = await response.json(); // Parse the JSON response
-console.log(data);
+      // console.log(data);
       if (response.ok) {
         // If item addition is successful, redirect to inventory page
         navigate("/inventory", {
