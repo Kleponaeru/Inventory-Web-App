@@ -104,26 +104,29 @@ function FormUpdate() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://localhost:5000/api/items/update/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
-        },
-        body: JSON.stringify({
-          item_name,
-          id_category: item_category.id, // Send category ID
-          item_category: item_category.name,
-          qty: parseInt(qty), // Convert to number
-          supplier,
-          brand,
-          cost: parseFloat(cost), // Convert to number
-          sales_price: parseFloat(sales_price),
-          description,
-          expiration_date,
-          arrival_date,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/items/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          },
+          body: JSON.stringify({
+            item_name,
+            id_category: item_category.id, // Send category ID
+            item_category: item_category.name,
+            qty: parseInt(qty), // Convert to number
+            supplier,
+            brand,
+            cost: parseFloat(cost), // Convert to number
+            sales_price: parseFloat(sales_price),
+            description,
+            expiration_date,
+            arrival_date,
+          }),
+        }
+      );
 
       const data = await response.json(); // Parse the JSON response
       if (response.ok) {
@@ -371,13 +374,24 @@ function FormUpdate() {
               </div>
 
               {/* Submit Button */}
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Update Data
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="flex w-full justify-center rounded-md border border-indigo-600 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-200 ease-in-out"
+                    onClick={() => navigate("/inventory")}
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div className="mt-4">
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Update Data
+                  </button>
+                </div>
               </div>
             </form>
           </div>

@@ -3,6 +3,7 @@ import Navbar from "../navbar";
 import Card from "@mui/material/Card";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+// import { AiOutlineClose } from "react-icons/ai";
 
 function FormInput() {
   const [categories, setCategories] = useState([]);
@@ -110,6 +111,13 @@ function FormInput() {
         <Card variant="outlined" className="max-w-4xl mx-auto mt-10 p-6">
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold">Add Items</h2>
+            {/* <button
+              // onClick={handleClose}
+              className="absolute top-2 right-2 p-2 rounded-full bg-gray-800 text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              aria-label="Close"
+            >
+              <AiOutlineClose size={20} />
+            </button> */}
           </div>
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-4xl py-6">
             <form
@@ -335,13 +343,24 @@ function FormInput() {
               </div>
 
               {/* Submit Button */}
-              <div className="mt-4">
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Submit
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="flex w-full justify-center rounded-md border border-indigo-600 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-200 ease-in-out"
+                    onClick={() => navigate("/inventory")}>
+                    Cancel
+                  </button>
+                </div>
+
+                <div className="mt-4">
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Submit
+                  </button>
+                </div>
               </div>
             </form>
           </div>
