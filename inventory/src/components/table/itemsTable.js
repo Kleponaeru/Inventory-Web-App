@@ -43,7 +43,7 @@ const TableItems = () => {
       selector: (row, index) => index + 1,
       sortable: true,
       width: "60px",
-      compact: true,
+      compact: "true",
     },
     {
       name: "Items Name",
@@ -65,7 +65,7 @@ const TableItems = () => {
       selector: (row) => row.qty,
       sortable: true,
       width: "60px",
-      compact: true,
+      compact: "true",
     },
     {
       name: "Cost per item",
@@ -90,12 +90,12 @@ const TableItems = () => {
     {
       name: "Status",
       selector: (row) => (
-        <span class="bg-blue-100 text-blue-800 text-xs px-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
+        <span className="bg-blue-100 text-blue-800 text-xs px-2 rounded-full dark:bg-blue-900 dark:text-blue-300">
           {row.item_status}
         </span>
       ),
       sortable: true,
-      compact: true,
+      compact: "true",
     },
     {
       name: "Action",
@@ -161,7 +161,6 @@ const TableItems = () => {
       try {
         const response = await fetch("http://localhost:5000/api/items"); // Adjust the URL to your actual API endpoint
         const result = await response.json();
-        console.log(result); // Log the fetched data
         setData(result);
       } catch (error) {
         console.error("Error fetching data:", error);

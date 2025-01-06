@@ -6,13 +6,16 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineInventory2 } from "react-icons/md";
+import { LuNotebookText } from "react-icons/lu";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Hook to get current path
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleNav = () => {
     setNav(!nav);
@@ -53,12 +56,65 @@ const Navbar = () => {
     fetchUserData();
   }, [navigate]);
 
+  useEffect(() => {
+    const updateMobileView = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the width threshold as needed
+    };
+
+    updateMobileView();
+    window.addEventListener("resize", updateMobileView);
+    return () => window.removeEventListener("resize", updateMobileView);
+  }, []);
+
   const navItems = [
-    { id: 1, text: "Dashboard", href: "/dashboard" },
-    { id: 2, text: "Inventory", href: "/inventory" },
-    { id: 3, text: "Transactions", href: "/transactions" },
-    ...(user?.admin === "Y" ? [{ id: 4, text: "Report", href: "/" }] : []),
-    // { id: 5, text: "Logout", href: "/", icon: <MdLogout /> },
+    {
+      id: 1,
+      text: "Dashboard",
+      href: "/dashboard",
+      icon: (isActive) => (
+        <MdOutlineInventory2
+          size={20}
+          className={isActive ? "text-black" : "text-white"}
+        />
+      ),
+    },
+    {
+      id: 2,
+      text: "Inventory",
+      href: "/inventory",
+      icon: (isActive) => (
+        <LuNotebookText
+          size={20}
+          className={isActive ? "text-black" : "text-white"}
+        />
+      ),
+    },
+    {
+      id: 3,
+      text: "Transactions",
+      href: "/transactions",
+      icon: (isActive) => (
+        <LuNotebookText
+          size={20}
+          className={isActive ? "text-black" : "text-white"}
+        />
+      ),
+    },
+    ...(user?.admin === "Y"
+      ? [
+          {
+            id: 4,
+            text: "Report",
+            href: "/",
+            icon: (isActive) => (
+              <LuNotebookText
+                size={20}
+                className={isActive ? "text-black" : "text-white"}
+              />
+            ),
+          },
+        ]
+      : []),
   ];
 
   const handleLogout = () => {
@@ -87,7 +143,7 @@ const Navbar = () => {
               >
                 <Link to={item.href} className="flex items-center">
                   {item.text}
-                  {item.icon && <span className="ml-2">{item.icon}</span>}
+                  {item.icon && <span className="ml-2"></span>}
                 </Link>
               </li>
             ))}
@@ -176,18 +232,27 @@ const Navbar = () => {
             </h1>
 
             {/* Mobile Navigation Items */}
-            {navItems.map((item) => (
-              <li
-                key={item.id}
-                className={`p-4 border-b duration-300 cursor-pointer border-gray-600 ${
-                  location.pathname === item.href
-                    ? "bg-[#FFFFFF] text-black"
-                    : "hover:bg-[#FFFFFF] hover:text-black"
-                }`}
-              >
-                <Link to={item.href}>{item.text}</Link>
-              </li>
-            ))}
+            <ul>
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <li
+                    key={item.id}
+                    className={`p-4 border-b duration-300 cursor-pointer border-gray-600 ${
+                      isActive
+                        ? "bg-[#FFFFFF] text-black"
+                        : "hover:bg-[#FFFFFF] hover:text-black text-white"
+                    }`}
+                  >
+                    <Link to={item.href} className="flex items-center">
+                      <span className="mr-2">{item.icon(isActive)}</span>
+                      {item.text}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+
             <li
               className={`p-4 border-b duration-300 cursor-pointer border-gray-600
                   ? "bg-[#FFFFFF] text-black"
@@ -195,7 +260,7 @@ const Navbar = () => {
               }`}
             >
               <div className="link-wrapper">
-                <IoSettingsOutline size={20} className="bold-icon"/>
+                <IoSettingsOutline size={20} className="bold-icon" />
                 <Link to="/account-settings">Account Settings</Link>
               </div>
             </li>
