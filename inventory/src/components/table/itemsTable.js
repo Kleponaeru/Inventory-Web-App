@@ -211,7 +211,7 @@ const TableItems = () => {
             onClick={() => navigate("/inventory/add")}
             className="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            <GoPlusCircle /> <span>Add Items</span>
+            <GoPlusCircle className="text-xl" /> <span>Add Items</span>
           </button>
         </div>
         {/* Replace Bootstrap Card with Tailwind div */}

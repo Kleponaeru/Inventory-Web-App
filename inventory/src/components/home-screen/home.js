@@ -6,7 +6,6 @@ const stats = [
   { name: "Total Users", value: "1,024" },
   { name: "Active Projects", value: "76" },
   { name: "Revenue", value: "$120k" },
-  { name: "Tasks Completed", value: "4,500" },
 ];
 
 const navigation = [
@@ -24,10 +23,38 @@ export default function Dashboard() {
         <div className="flex-1 flex flex-col">
           {/* Dashboard Content */}
           <main className="p-6 flex-1 overflow-y-auto">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                {" "}
+                <h1 className="">
+                  Hi, Lorem ipsum.y only adjusting the height, the top alignment
+                  and horizontal dimensions remain the same.
+                </h1>
+              </div>
+              <div>
+                {" "}
+                <h1 className="">
+                  Hi, Lorem ipsum.y only adjusting the height, the top alignment
+                  and horizontal dimensions remain the same.
+                </h1>
+              </div>
+              <div>
+                {" "}
+                <h1 className="">
+                  Hi, Lorem ipsum.y only adjusting the height, the top alignment
+                  and horizontal dimensions remain the same.
+                </h1>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-10">
               {stats.map((stat) => (
                 <div
                   key={stat.name}
+                  style={{
+                    height: "auto",
+                    minHeight: "120px",
+                    alignContent: "center",
+                  }}
                   className="bg-white p-4 rounded-lg shadow text-center"
                 >
                   <dt className="text-sm font-medium text-gray-500">
@@ -40,7 +67,7 @@ export default function Dashboard() {
               ))}
             </div>
           </main>
-      <Slider />
+          {/* <Slider /> */}
         </div>
       </div>
     </>

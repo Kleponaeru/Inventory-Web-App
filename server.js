@@ -23,29 +23,34 @@ con.connect(function (err) {
   console.log("Connected as id " + con.threadId);
 });
 
+app.use(cors({
+  origin: 'http://localhost:3000', // your frontend URL
+  credentials: true
+}));
+
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-function authenticateToken(req, res, next) {
+const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = authHeader && authHeader.split(" ")[1]; // Extract token
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized: Token is missing" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ error: "Invalid token" });
+      return res.status(403).json({ error: "Forbidden: Invalid token" });
     }
 
-    // Use userId here, matching the token generation
-    req.user = { userId: decoded.userId };
+    req.user = user;
     next();
   });
-}
+};
+
 // API Routes
 app.get("/", (req, res) => {
   res.send("This is node server!");
@@ -53,13 +58,16 @@ app.get("/", (req, res) => {
 
 //ITEMS
 app.get("/api/items", (req, res) => {
-  con.query("SELECT * FROM items WHERE deleted_at IS NULL", function (err, result) {
-    if (err) {
-      res.status(500).json({ error: "Query Fail" });
-      return;
+  con.query(
+    "SELECT * FROM items WHERE deleted_at IS NULL",
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Fail" });
+        return;
+      }
+      res.json(result);
     }
-    res.json(result);
-  });
+  );
 });
 app.get("/api/items/:id", (req, res) => {
   const itemId = req.params.id;
@@ -137,7 +145,7 @@ app.post("/api/login", (req, res) => {
       async (err, result) => {
         if (err) {
           console.error("Database query error:", err);
-          return res.status(500).json({ error: "Database query failed" });
+          return res.status(500).json({ error: "Login failed" });
         }
 
         if (result.length === 0) {
@@ -176,29 +184,29 @@ app.post("/api/login", (req, res) => {
 });
 
 app.get("/api/user", authenticateToken, (req, res) => {
+  const userId = req.user.userId;
+  console.log(`Processing request for User ${userId}`);
+
   con.query(
     "SELECT * FROM users WHERE user_id = ?",
-    [req.user.userId],
+    [userId],
     function (err, result) {
       if (err) {
+        console.error("Database error:", err);
         res.status(500).json({ error: "Query Failed" });
         return;
       }
-      res.json(result[0]);
-    }
-  );
-});
 
-app.get("/api/get/users", authenticateToken, (req, res) => {
-  con.query(
-    "SELECT * FROM users WHERE user_id = ?",
-    [req.user.userId],
-    function (err, result) {
-      if (err) {
-        res.status(500).json({ error: "Query Fail" });
+      console.log("Database query result:", result);
+
+      if (!result || result.length === 0) {
+        console.log("No user found for ID:", userId);
+        res.status(404).json({ error: "User not found" });
         return;
       }
-      res.json(result);
+
+      console.log("Sending user data:", result[0]);
+      res.json(result[0]);
     }
   );
 });
