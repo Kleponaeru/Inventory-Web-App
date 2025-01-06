@@ -141,7 +141,6 @@ const Navbar = () => {
               >
                 <Link to={item.href} className="flex items-center">
                   {item.text}
-                  {item.icon && <span className="ml-2"></span>}
                 </Link>
               </li>
             ))}
