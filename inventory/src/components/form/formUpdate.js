@@ -374,22 +374,20 @@ function FormUpdate() {
               </div>
 
               {/* Submit Button */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div className="flex mt-4 justify-end space-x-4">
                   <button
                     type="button"
-                    className="flex w-full justify-center rounded-md border border-indigo-600 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-200 ease-in-out"
+                    className="flex justify-center rounded-md border border-indigo-600 bg-white px-3 py-1.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-200 ease-in-out"
                     onClick={() => navigate("/inventory")}
                   >
                     Cancel
                   </button>
-                </div>
-                <div className="mt-4">
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="flex justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
-                    Update Data
+                    Update Items
                   </button>
                 </div>
               </div>

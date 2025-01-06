@@ -47,9 +47,8 @@ export default function Login({ onLogin }) {
         localStorage.setItem("authToken", data.token);
 
         // Verify token was stored correctly
-        const storedToken = localStorage.getItem("authToken");
-        console.log("Token stored successfully:", !!storedToken);
-
+        // const storedToken = localStorage.getItem("authToken");
+        // console.log("Token stored successfully:", !!storedToken);
         // Call onLogin callback
         onLogin(data.token);
 
