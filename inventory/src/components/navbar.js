@@ -8,6 +8,7 @@ import { CgProfile } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineInventory2 } from "react-icons/md";
 import { LuNotebookText } from "react-icons/lu";
+import { FiHome } from "react-icons/fi";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -72,10 +73,7 @@ const Navbar = () => {
       text: "Dashboard",
       href: "/dashboard",
       icon: (isActive) => (
-        <MdOutlineInventory2
-          size={20}
-          className={isActive ? "text-black" : "text-white"}
-        />
+        <FiHome size={20} className={isActive ? "text-black" : "text-white"} />
       ),
     },
     {
@@ -83,7 +81,7 @@ const Navbar = () => {
       text: "Inventory",
       href: "/inventory",
       icon: (isActive) => (
-        <LuNotebookText
+        <MdOutlineInventory2
           size={20}
           className={isActive ? "text-black" : "text-white"}
         />
@@ -154,7 +152,7 @@ const Navbar = () => {
         <div className="hidden md:block">
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+              <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white hover:text-gray-900">
                 <CgProfile size={20} />
                 <span>{user?.f_name || "User"}</span>
                 <ChevronDownIcon
