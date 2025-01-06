@@ -30,7 +30,6 @@ body {
   padding: 20px; /* Adjust padding */
 }
 
-
 /* select.css */
 
 /* Control (main input wrapper) */
@@ -76,3 +75,16 @@ body {
   height: 32px !important;
 }
 
+.link-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.link-wrapper svg {
+  margin-right: 8px;
+}
+
+.bold-icon {
+  stroke:white;
+  stroke-width: 1; /* Increase stroke width for a bolder effect */
+}

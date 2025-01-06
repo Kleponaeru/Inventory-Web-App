@@ -5,6 +5,7 @@ import { MdLogout } from "react-icons/md";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { CgProfile } from "react-icons/cg";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const [nav, setNav] = useState(false);
@@ -114,7 +115,7 @@ const Navbar = () => {
               <div className="py-1">
                 <MenuItem>
                   <a
-                    href="#"
+                    href="/account-settings"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Account settings
@@ -165,7 +166,7 @@ const Navbar = () => {
           <ul
             className={`${
               nav
-                ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500 z-50"
+                ? "fixed md:hidden left-0 top-0 w-[65%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500 z-50"
                 : "ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]"
             }`}
           >
@@ -187,19 +188,45 @@ const Navbar = () => {
                 <Link to={item.href}>{item.text}</Link>
               </li>
             ))}
+            <li
+              className={`p-4 border-b duration-300 cursor-pointer border-gray-600
+                  ? "bg-[#FFFFFF] text-black"
+                  : "hover:bg-[#FFFFFF] hover:text-black"
+              }`}
+            >
+              <div className="link-wrapper">
+                <IoSettingsOutline size={20} className="bold-icon"/>
+                <Link to="/account-settings">Account Settings</Link>
+              </div>
+            </li>
 
             {/* Mobile Profile Section - Placed at the bottom */}
-            <div className="absolute bottom-0 w-full border-t border-gray-600 px-4 py-3 flex justify-between items-center">
-              <div className="flex items-center space-x-2 text-white">
-                <CgProfile size={20} />
-                <span>{user?.f_name || "User"}</span>
+            <div className="absolute bottom-0 w-full border-t border-gray-600 px-4 py-3 flex items-center justify-between">
+              {/* Profile Section */}
+              <div className="flex items-center text-white space-x-3">
+                <CgProfile size={24} />
+                {/* Name and Email */}
+                <div className="flex flex-col">
+                  <span className="font-medium">
+                    {user?.f_name || "User"} {user?.l_name ?? "-"}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    {user?.email || "User email"}
+                  </span>
+                </div>
               </div>
+
+              {/* Logout Button */}
               <button
                 onClick={handleLogout}
                 className="flex items-center space-x-2 text-white hover:text-gray-300"
+                style={{
+                  marginLeft: "auto",
+                  paddingLeft: "16px",
+                  paddingRight: "16px",
+                }}
               >
-                <MdLogout size={20} />
-                {/* <span>Logout</span> */}
+                <MdLogout size={24} />
               </button>
             </div>
           </ul>
