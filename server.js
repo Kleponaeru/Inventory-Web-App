@@ -23,10 +23,12 @@ con.connect(function (err) {
   console.log("Connected as id " + con.threadId);
 });
 
-app.use(cors({
-  origin: 'http://localhost:3000', // your frontend URL
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend URL
+    credentials: true,
+  })
+);
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -185,7 +187,6 @@ app.post("/api/login", (req, res) => {
 
 app.get("/api/user", authenticateToken, (req, res) => {
   const userId = req.user.userId;
-  console.log(`Processing request for User ${userId}`);
 
   con.query(
     "SELECT * FROM users WHERE user_id = ?",
@@ -204,8 +205,6 @@ app.get("/api/user", authenticateToken, (req, res) => {
         res.status(404).json({ error: "User not found" });
         return;
       }
-
-      console.log("Sending user data:", result[0]);
       res.json(result[0]);
     }
   );
@@ -367,6 +366,20 @@ app.post("/api/items/delete/:id", authenticateToken, async (req, res) => {
     console.error("Error updating user ID:", err);
     res.status(500).json({ error: "Failed to generate user ID" });
   }
+});
+
+//TRANSACTION
+app.get("/api/transactions", (req, res) => {
+  con.query(
+    "SELECT * FROM transactions WHERE deleted_at IS NULL",
+    function (err, result) {
+      if (err) {
+        res.status(500).json({ error: "Query Fail" });
+        return;
+      }
+      res.json(result);
+    }
+  );
 });
 
 //SET PORT AND ROUTE

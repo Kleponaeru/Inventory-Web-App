@@ -12,9 +12,10 @@ import TableItems from "./components/table/itemsTable";
 import Register from "./components/login-form/registerForm";
 import Navbar from "./components/navbar";
 import NotFound from "./components/notFound";
-import FormInput from "./components/form/formInput";
+import FormInput from "./components/form/formInputItems";
 import Dashboard from "./components/home-screen/home";
-import FormUpdate from "./components/form/formUpdate";
+import FormUpdate from "./components/form/formUpdateItems";
+import TableTransactions from "./components/table/transactionsTable";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -97,6 +98,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <FormUpdate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <TableTransactions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions/add"
+            element={
+              <ProtectedRoute>
+                <TableTransactions />
               </ProtectedRoute>
             }
           />
