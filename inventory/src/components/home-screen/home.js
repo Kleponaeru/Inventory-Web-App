@@ -66,6 +66,26 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-10">
+              {stats.map((stat) => (
+                <div
+                  key={stat.name}
+                  style={{
+                    height: "120px",
+                    minHeight: "120px",
+                    alignContent: "center",
+                  }}
+                  className="bg-white p-4 rounded-lg shadow text-center"
+                >
+                  <dt className="text-sm font-medium text-gray-500">
+                    {stat.name}
+                  </dt>
+                  <dd className="text-2xl font-semibold text-gray-800">
+                    {stat.value}
+                  </dd>
+                </div>
+              ))}
+            </div>
           </main>
           {/* <Slider /> */}
         </div>
