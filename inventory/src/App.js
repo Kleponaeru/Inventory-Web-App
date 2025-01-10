@@ -16,6 +16,7 @@ import FormInput from "./components/form/formInputItems";
 import Dashboard from "./components/home-screen/home";
 import FormUpdate from "./components/form/formUpdateItems";
 import TableTransactions from "./components/table/transactionsTable";
+import FormInputTransactions from "./components/form/formInputTransactions";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -113,7 +114,7 @@ function App() {
             path="/transactions/add"
             element={
               <ProtectedRoute>
-                <TableTransactions />
+                <FormInputTransactions />
               </ProtectedRoute>
             }
           />
